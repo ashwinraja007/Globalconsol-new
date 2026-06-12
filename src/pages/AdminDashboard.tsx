@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Users, LogOut, MonitorPlay, Info, Bell, Target, Star, Briefcase, BookOpen, Globe, PhoneCall, Newspaper, Megaphone, PanelBottom } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, MonitorPlay, Info, Bell, Target, Star, Briefcase, BookOpen, Globe, PhoneCall, Newspaper, Megaphone, PanelBottom, Search } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const AdminDashboard = () => {
@@ -48,6 +48,7 @@ const AdminDashboard = () => {
     { label: 'Blog & Gallery', path: '/admin/blog', icon: <Newspaper className="w-5 h-5" /> },
     { label: 'Career Page', path: '/admin/career', icon: <Briefcase className="w-5 h-5" /> },
     { label: 'Popup Management', path: '/admin/popup', icon: <Megaphone className="w-5 h-5" /> },
+    { label: 'SEO Settings', path: '/admin/seo', icon: <Search className="w-5 h-5" /> },
     { label: 'Footer Settings', path: '/admin/footer', icon: <PanelBottom className="w-5 h-5" /> },
   ];
 
