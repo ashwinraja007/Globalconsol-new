@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, Search } from "lucide-react";
+import { Save, Plus, Trash2, Search, Globe } from "lucide-react";
+import { useAuth, ADMIN_COUNTRIES } from "@/contexts/AuthContext";
 
 interface SeoMetadata {
   id?: string;
@@ -13,6 +15,7 @@ interface SeoMetadata {
   title: string;
   description: string;
   keywords: string;
+  country?: string;
   updated_at?: string;
 }
 
@@ -21,6 +24,7 @@ const SeoAdmin = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const { toast } = useToast();
+  const { adminCountry, setAdminCountry } = useAuth();
 
   const [formData, setFormData] = useState<SeoMetadata>({
     page_path: '',
@@ -31,14 +35,17 @@ const SeoAdmin = () => {
   const [editingId, setEditingId] = useState<string | null>(null);
 
   useEffect(() => {
+    resetForm();
     fetchMetadata();
-  }, []);
+  }, [adminCountry]);
 
   const fetchMetadata = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from('seo_metadata')
         .select('*')
+        .eq('country', adminCountry)
         .order('page_path', { ascending: true });
       
       if (error) throw error;
@@ -64,6 +71,7 @@ const SeoAdmin = () => {
         .upsert({
           ...(editingId ? { id: editingId } : {}),
           ...formData,
+          country: adminCountry,
           updated_at: new Date().toISOString()
         });
 
@@ -120,7 +128,22 @@ const SeoAdmin = () => {
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
             <Search className="text-[#1565C0]" /> SEO Management
           </h1>
-          <p className="text-slate-500 mt-1">Configure search engine metadata for all site pages.</p>
+          <p className="text-slate-500 mt-1">Configure search engine metadata for {ADMIN_COUNTRIES.find(c => c.value === adminCountry)?.label || adminCountry}.</p>
+        </div>
+        <div className="flex items-center gap-4">
+          <Select value={adminCountry} onValueChange={setAdminCountry}>
+            <SelectTrigger className="w-[200px] h-12 rounded-xl bg-slate-50 border-slate-200 font-semibold text-slate-700">
+              <div className="flex items-center gap-2">
+                <Globe className="w-4 h-4 text-[#D4A62A]" />
+                <SelectValue placeholder="Select Country" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              {ADMIN_COUNTRIES.map(country => (
+                <SelectItem key={country.value} value={country.value}>{country.label}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
       </div>
 
