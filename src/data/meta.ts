@@ -1,10 +1,10 @@
-interface MetaInfo {
+export interface MetaInfo {
   title: string;
   description: string;
   keywords: string;
 }
 
-const meta: Record<string, MetaInfo> = {
+export const defaultMeta: Record<string, MetaInfo> = {
   '/': {
     title: 'GC - Logistics & Transportation',
     description: 'Reliable and efficient logistics solutions tailored to your business needs.',
@@ -162,4 +162,11 @@ const meta: Record<string, MetaInfo> = {
   },
 };
 
-export default meta;
+/**
+ * Helper to get metadata with fallback
+ */
+export const getMetaForPath = (path: string, dynamicMeta?: Record<string, MetaInfo>): MetaInfo => {
+  return dynamicMeta?.[path] || defaultMeta[path] || defaultMeta['/not-found'];
+};
+
+export default defaultMeta;
