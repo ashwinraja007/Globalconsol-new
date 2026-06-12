@@ -90,7 +90,7 @@ const AdminDashboard = () => {
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar">
           <p className="px-4 pb-2 pt-2 text-[11px] font-bold text-[#D4A62A] uppercase tracking-widest">Content</p>
           {navItems.map((item) => {
-            const isActive = location.pathname === item.path || (item.path !== '/admin' && location.pathname === item.path);
+            const isActive = location.pathname === item.path;
             return (
               <Link
                 key={item.path}
