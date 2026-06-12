@@ -4,10 +4,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Save, Plus, Trash2, Search, Globe } from "lucide-react";
+import { Save, Plus, Trash2, Search, Globe, Info, Layout, MousePointer2 } from "lucide-react";
 import { useAuth, ADMIN_COUNTRIES } from "@/contexts/AuthContext";
+import { Badge } from "@/components/ui/badge";
+
+const SUGGESTED_PATHS = [
+  { label: "Home Page", value: "/" },
+  { label: "About Us", value: "/about-us" },
+  { label: "Services Overview", value: "/services" },
+  { label: "Contact Us", value: "/contact" },
+  { label: "Gallery", value: "/gallery" },
+  { label: "Career Page", value: "/career" },
+  { label: "Blog", value: "/blog" },
+  { label: "Projects", value: "/projects" },
+  { label: "Sea Freight", value: "/services/sea-freight" },
+  { label: "Air Freight", value: "/services/air-freight" },
+  { label: "Customs Clearance", value: "/services/customs-clearance" },
+  { label: "Warehousing", value: "/services/warehousing" },
+  { label: "Consolidation", value: "/services/consolidation" },
+  { label: "Project Cargo", value: "/services/project-cargo" },
+  { label: "Transhipment", value: "/services/transhipment" },
+  { label: "Liquid Cargo", value: "/services/liquid-cargo" },
+  { label: "3PL Logistics", value: "/services/third-party-logistics" },
+  { label: "Liner Agency", value: "/services/liner-agency" },
+];
 
 interface SeoMetadata {
   id?: string;
@@ -128,7 +150,7 @@ const SeoAdmin = () => {
           <h1 className="text-3xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
             <Search className="text-[#1565C0]" /> SEO Management
           </h1>
-          <p className="text-slate-500 mt-1">Configure search engine metadata for {ADMIN_COUNTRIES.find(c => c.value === adminCountry)?.label || adminCountry}.</p>
+          <p className="text-slate-500 mt-1">Manage metadata for <strong>{ADMIN_COUNTRIES.find(c => c.value === adminCountry)?.label || adminCountry}</strong></p>
         </div>
         <div className="flex items-center gap-4">
           <Select value={adminCountry} onValueChange={setAdminCountry}>
@@ -154,13 +176,40 @@ const SeoAdmin = () => {
         <CardContent className="p-6">
           <form onSubmit={handleSave} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Page Path (e.g. /about-us)</label>
-                <Input value={formData.page_path} onChange={(e) => setFormData({...formData, page_path: e.target.value})} placeholder="/" className="bg-slate-50" required />
+              <div className="space-y-3">
+                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <Layout className="w-4 h-4 text-[#D4A62A]" /> Select or Type Page Path
+                </label>
+                <div className="flex gap-2">
+                  <div className="flex-1">
+                    <Input 
+                      value={formData.page_path} 
+                      onChange={(e) => setFormData({...formData, page_path: e.target.value})} 
+                      placeholder="e.g. /about-us" 
+                      className="bg-slate-50 h-11 rounded-xl" 
+                      required 
+                    />
+                  </div>
+                  <Select onValueChange={(val) => setFormData({...formData, page_path: val})}>
+                    <SelectTrigger className="w-[180px] h-11 rounded-xl bg-slate-100 border-none">
+                      <SelectValue placeholder="Quick Select" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Main Pages</SelectLabel>
+                        {SUGGESTED_PATHS.map(path => (
+                          <SelectItem key={path.value} value={path.value}>{path.label}</SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-slate-700">Meta Title</label>
-                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Page Title | Global Consol" className="bg-slate-50" />
+                <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
+                  <Info className="w-4 h-4 text-[#D4A62A]" /> Meta Title
+                </label>
+                <Input value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} placeholder="Page Title | Global Consol" className="bg-slate-50 h-11 rounded-xl" />
               </div>
             </div>
             <div className="space-y-2">
@@ -182,14 +231,19 @@ const SeoAdmin = () => {
       </Card>
 
       <div className="space-y-4">
-        <h2 className="text-xl font-bold text-slate-800 px-2">Existing Configurations</h2>
+        <div className="flex items-center justify-between px-2">
+          <h2 className="text-xl font-bold text-slate-800">Existing Configurations</h2>
+          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-100">
+            {metadata.length} Pages Configured
+          </Badge>
+        </div>
         <div className="grid gap-4">
           {metadata.map((item) => (
             <Card key={item.id} className="border-0 shadow-sm ring-1 ring-slate-100 rounded-2xl overflow-hidden hover:ring-[#1565C0]/30 transition-all">
               <CardContent className="p-5 flex flex-col md:flex-row justify-between gap-4">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-bold uppercase tracking-wider">{item.page_path}</span>
+                    <Badge className="bg-slate-800 text-white font-mono">{item.page_path}</Badge>
                     <h3 className="font-bold text-slate-800">{item.title || "No Title Set"}</h3>
                   </div>
                   <p className="text-sm text-slate-500 line-clamp-1 italic">{item.description || "No description provided."}</p>
