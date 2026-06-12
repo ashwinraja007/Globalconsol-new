@@ -76,6 +76,7 @@ import AboutUsAdmin from '@/pages/AboutUsAdmin';
 import PopupAdmin from '@/pages/admin/PopupAdmin';
 import FooterAdmin from '@/pages/admin/FooterAdmin';
 import CareerAdmin from '@/pages/admin/CareerAdmin';
+import SeoAdmin from '@/pages/SeoAdmin';
 
 const queryClient = new QueryClient({
   defaultOptions: {
