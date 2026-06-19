@@ -48,7 +48,6 @@ const AdminDashboard = () => {
     { label: 'Blog & Gallery', path: '/admin/blog', icon: <Newspaper className="w-5 h-5" /> },
     { label: 'Career Page', path: '/admin/career', icon: <Briefcase className="w-5 h-5" /> },
     { label: 'Popup Management', path: '/admin/popup', icon: <Megaphone className="w-5 h-5" /> },
-    { label: 'SEO Settings', path: '/admin/seo', icon: <Search className="w-5 h-5" /> },
     { label: 'Footer Settings', path: '/admin/footer', icon: <PanelBottom className="w-5 h-5" /> },
   ];
 
