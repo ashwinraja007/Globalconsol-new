@@ -86,12 +86,6 @@ const SeoAdmin = () => {
       return;
     }
 
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
-      toast({ title: "Authentication Error", description: "You are not logged in. Please re-login.", variant: "destructive" });
-      return;
-    }
-
     setSaving(true);
     try {
       const { error } = await supabase
