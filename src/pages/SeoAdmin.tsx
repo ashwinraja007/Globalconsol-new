@@ -101,6 +101,8 @@ const SeoAdmin = () => {
           ...formData,
           country: adminCountry,
           updated_at: new Date().toISOString()
+        }, {
+          onConflict: editingId ? 'id' : 'country,page_path'
         });
 
       if (error) throw error;

@@ -31,6 +31,7 @@ const Meta = () => {
       try {
         const currentCountry = getCurrentCountryFromPath(pathname);
         const countrySlug = currentCountry.name.toLowerCase().replace(/\s+/g, '');
+        console.log(`[SEO Debug] Fetching SEO for PathKey: "${pathKey}", Country: "${countrySlug}"`);
         
         // Fetch from Supabase
         const { data, error } = await supabase
@@ -40,18 +41,23 @@ const Meta = () => {
           .eq('page_path', pathKey)
           .maybeSingle();
 
+        if (error) {
+          console.error('[SEO Debug] Supabase query error:', error);
+        }
+
         if (data && !error) {
+          console.log('[SEO Debug] Found matching SEO metadata in DB:', data);
           setMetaData({
             title: data.title || defaultMeta.title,
             description: data.description || defaultMeta.description,
             keywords: data.keywords || defaultMeta.keywords,
           });
         } else {
-          // If no specific metadata found for this page/country, fall back to default
+          console.log('[SEO Debug] No custom metadata found or query error occurred. Falling back to defaults:', defaultMeta);
           setMetaData(defaultMeta);
         }
       } catch (err) {
-        console.error('Error fetching SEO metadata:', err);
+        console.error('[SEO Debug] Catch block error:', err);
         setMetaData(defaultMeta);
       }
     };
