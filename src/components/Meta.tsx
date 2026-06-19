@@ -1,6 +1,8 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import meta from '@/data/meta';
+import { getCurrentCountryFromPath } from "@/services/countryDetection";
+import { supabase } from "@/integrations/supabase/client";
 
 const countries = ['singapore', 'sri-lanka', 'myanmar', 'bangladesh', 'pakistan', 'home'];
 
@@ -21,7 +23,49 @@ const Meta = () => {
     pathKey = '/';
   }
 
-  const metaData = meta[pathKey] || meta['/'];
+  const defaultMeta = meta[pathKey] || meta['/'];
+  const [metaData, setMetaData] = useState(defaultMeta);
+
+  useEffect(() => {
+    const fetchSEOMetadata = async () => {
+      try {
+        const currentCountry = getCurrentCountryFromPath(pathname);
+        const countrySlug = currentCountry.name.toLowerCase().replace(/\s+/g, '');
+        
+        // Fetch from Supabase
+        const { data, error } = await supabase
+          .from('seo_metadata' as any)
+          .select('*')
+          .eq('country', countrySlug)
+          .eq('page_path', pathKey)
+          .maybeSingle();
+
+        if (data && !error) {
+          setMetaData({
+            title: data.title || defaultMeta.title,
+            description: data.description || defaultMeta.description,
+            keywords: data.keywords || defaultMeta.keywords,
+          });
+        } else {
+          // If no specific metadata found for this page/country, fall back to default
+          setMetaData(defaultMeta);
+        }
+      } catch (err) {
+        console.error('Error fetching SEO metadata:', err);
+        setMetaData(defaultMeta);
+      }
+    };
+
+    fetchSEOMetadata();
+
+    // Listen for admin changes (from website_updated event)
+    const handleUpdate = () => fetchSEOMetadata();
+    window.addEventListener('website_updated', handleUpdate);
+    
+    return () => {
+      window.removeEventListener('website_updated', handleUpdate);
+    };
+  }, [pathname, pathKey, defaultMeta]);
 
   useEffect(() => {
     document.title = metaData.title;
@@ -44,3 +88,4 @@ const Meta = () => {
 };
 
 export default Meta;
+
