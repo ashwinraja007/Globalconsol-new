@@ -49,6 +49,7 @@ const AdminDashboard = () => {
     { label: 'Career Page', path: '/admin/career', icon: <Briefcase className="w-5 h-5" /> },
     { label: 'Popup Management', path: '/admin/popup', icon: <Megaphone className="w-5 h-5" /> },
     { label: 'Footer Settings', path: '/admin/footer', icon: <PanelBottom className="w-5 h-5" /> },
+    { label: 'SEO Meta Tags', path: '/admin/seo', icon: <Search className="w-5 h-5" /> },
   ];
 
   const serviceDetailsItems = [
