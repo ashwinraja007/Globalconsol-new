@@ -18,7 +18,8 @@ import {
   FileText,
   Newspaper,
   Megaphone,
-  PanelBottom
+  PanelBottom,
+  Search
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -40,6 +41,7 @@ const AdminSidebar: React.FC = () => {
     { path: "/blog", label: "Blog & Gallery", icon: Newspaper },
     { path: "/career", label: "Career Page", icon: Briefcase },
     { path: "/popup", label: "Popup Management", icon: Megaphone },
+    { path: "/seo", label: "SEO Meta Tags", icon: Search },
   ];
 
   const serviceDetailsItems = [
