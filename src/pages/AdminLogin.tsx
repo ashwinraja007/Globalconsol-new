@@ -32,7 +32,7 @@ const AdminLogin = () => {
         title: "Login successful",
         description: "Welcome to the Admin Panel!",
       });
-      navigate('/admin');
+      navigate('/admin/hero');
     } catch (error: any) {
       toast({
         variant: "destructive",
