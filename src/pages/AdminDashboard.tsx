@@ -36,7 +36,6 @@ const AdminDashboard = () => {
   };
 
   const navItems = [
-    { label: 'Overview', path: '/admin', icon: <LayoutDashboard className="w-5 h-5" /> },
     { label: 'Hero Section', path: '/admin/hero', icon: <MonitorPlay className="w-5 h-5" /> },
     { label: 'About Section', path: '/admin/about', icon: <Info className="w-5 h-5" /> },
     { label: 'About Us Page', path: '/admin/about-page', icon: <BookOpen className="w-5 h-5" /> },
